@@ -1,15 +1,18 @@
 var createError = require('http-errors');
 var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
+const cors = require("cors");
+var path = require("path");
+var cookieParser = require("cookie-parser");
 var logger = require('morgan');
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const jwt = require("jsonwebtoken");
 
 //Route files
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var indexRouter = require('./routes');
+var postRouter = require('./routes/postRouter');
+var usersRouter = require('./routes/userRouter');
+var newstellerRouter  = require ('./routes/newstellerRouter')
 
 var app = express();
 
@@ -56,7 +59,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Redirect to routes
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/post', postRouter);
+app.use('/user', usersRouter);
+app.use('/newsteller',newstellerRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
