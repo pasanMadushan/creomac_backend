@@ -55,16 +55,27 @@ const deleteCatergoryAction = (req,res)=>{
 
 const editCatergoryAction = (req,res) =>{
   categoryModel.editCategory(req.body.cat_id, req.body.new_name)
+
   .then((cat) => {
-      res.statusCode = 200;
-      res.set("Content-Type", "application/json");
-      res.json({ success: true });
+      // console.log("results", cat)
+      if(cat == 'already exists'){
+        res.statusCode= 200
+        res.set("Content-Type", "application/json");
+        res.json({ success: true, exist:true });
+      }
+      else{
+        res.statusCode = 200;
+        res.set("Content-Type", "application/json");
+        res.json({ success: true, exist:false });
+      }
+      
     })
     .catch((err) => {
       res.statusCode = 500;
       res.set("Content-Type", "application/json");
       res.json({ success: false, message: err });
     });
+
 }
 
 module.exports = {

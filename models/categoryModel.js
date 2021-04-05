@@ -78,15 +78,46 @@ const deleteCategory  = (cat_id) =>{
 }
 
 
-const editCategory  = ({cat_id,new_name}) =>{
-  console.log('edit cat id',new_name)
+// const editCategory  = (cat_id,new_name) =>{
+//   return new Promise((resolve, reject) => {
+//       const query = "update `Category` set `cat_name` = ? where `cat_id` = ?";
+//       db.query(query,[new_name,cat_id],
+//       (error, results, fields) => {
+//         if (!error) {
+//           console.log("cat edited ")
+//           resolve(results);
+//         } else {
+//           reject(error);
+//         }
+//       });
+//     });
+// }
+
+
+const editCategory = (cat_id,new_name) =>{
+
   return new Promise((resolve, reject) => {
-      const query = "update `Category` set `cat_name` = ? where `cat_id` = ?";
-      db.query(query,[new_name,cat_id],
+      const query1 = "select * from `Category` where `cat_name` = ?";
+      db.query(query1,[new_name],
       (error, results, fields) => {
         if (!error) {
-          console.log("cat edited ")
-          resolve(results);
+          if (results === undefined || results.length == 0){
+            const query2 = "update `Category` set `cat_name` = ? where `cat_id` = ?";
+            db.query(query2,[new_name,cat_id],
+            (error, results, fields) => {
+            if (!error) {
+              resolve(results);
+              }
+            else{
+              reject(error);
+            }})
+          }
+
+          else if(results.length >0){
+            console.log("already exits")
+            resolve('already exists')
+          }
+
         } else {
           reject(error);
         }
